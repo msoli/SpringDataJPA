@@ -1,0 +1,71 @@
+
+ws:
+  usuario: AAA010101AAA
+  password: demo
+
+server:
+  port: 8090
+  undertow:
+    accesslog:
+      enabled: false
+  context-path: /sanjorge
+  tomcat:
+    basedir: ${java.io.tmpdir}/sanjorgetimbrado
+
+org:
+  quartz:
+    scheduler:
+      instanceName: spring-boot-quartz-baldor
+      instanceId: AUTO
+    threadPool:
+      threadCount: 1
+
+job:
+  startDelay: 0
+  repeatInterval: 0
+  description: Job de timbrado
+  cronExpression:  0 0/1 * ? * * *
+  key: TimbradoJob
+
+spring:
+    profiles:
+       active:
+    resources:
+        cache-period: 0
+
+    datasource:
+            primary:
+              url: jdbc:sqlserver://localhost;databaseName=siglodsjcc
+              type:  com.zaxxer.hikari.HikariDataSource
+              driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDataSource
+              hikari:
+                  username: baldor
+                  password: baldor
+                  connection-test-query: SELECT 1
+                  minimum-idle: 2
+                  maximum-pool-size: 5
+                  pool-name: sqlSJPool
+
+            secondary:
+                url: jdbc:h2:~/sanjorge;MVCC=TRUE;DB_CLOSE_ON_EXIT=TRUE;AUTO_SERVER=TRUE
+                type:  com.zaxxer.hikari.HikariDataSource
+                driver-class-name: org.h2.jdbcx.JdbcDataSource
+                hikari:
+                    username: sa
+                    password:
+                    connection-test-query: SELECT 1
+                    minimum-idle: 2
+                    maximum-pool-size: 5
+                    pool-name: h2SJPool
+
+    jpa:
+      show-sql: true
+      generate-ddl: false
+      hibernate:
+        naming:
+          implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        ddl-auto: none
+
+
+
